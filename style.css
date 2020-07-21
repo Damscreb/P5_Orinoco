@@ -5,3 +5,11 @@
 p {
     font-size : 14px;
 }
+
+.color-choice {
+    font-weight: 600;
+}
+
+.hidden {
+    visibility : hidden;
+}
