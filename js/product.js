@@ -4,44 +4,40 @@
 let teddieName = document.getElementById('name');
 let teddieImg = document.getElementById('picture');
 let teddiePrice = document.getElementById('price');
-let choiceColors = document.querySelectorAll('#color-choice label');
 
-console.log(choiceColors);
+let colorForm = document.getElementById('color-choice');
+let newInput = document.createElement('input');
+    newInput.name = 'color';
+    newInput.type = 'radio';
+let newLabel = document.createElement('label');
+let newBr = document.createElement('br');
 
 // Premièrement, récupérer les données du Teddy grâce à l'id
+// Pour ce faire on va appeller l'API avec l'ID du produit voulu
 
 console.log(localStorage);
 
-fetch('http://localhost:3000/api/teddies')
+fetch(`http://localhost:3000/api/teddies/${localStorage.id}`)
     .then(function(response) {
         return response.json();
     })
     .then(function(data) {
-        console.log(data);
-        // Boucle dans l'API pour afficher le nom, l'image et le prix du Teddy sélectionné
-        for (let i=0; i<data.length; i++) {
-            if (data[i]._id === localStorage.id) {
-                teddieName.innerHTML = data[i].name;
-                teddieImg.src = data[i].imageUrl;
-                data[i].price = data[i].price/100;
-                teddiePrice.textContent = `Prix : ${data[i].price},00 €`;  
-                for (let j=0; j<data[i].colors.length; j++) {     // Boucle pour afficher les couleurs dispo
-                    choiceColors[j].textContent = data[i].colors[j];;
-                    if (data[i].colors.length === 3) {
-                        document.getElementById('color4').className = 'hidden';
-                    }
-                    if (data[i].colors.length === 2) {
-                        document.getElementById('color3').className = 'hidden';
-                        document.getElementById('color4').className = 'hidden';
-                    }
-                    if (data[i].colors.length === 1) {
-                        document.getElementById('color2').className = 'hidden';
-                        document.getElementById('color3').className = 'hidden';
-                        document.getElementById('color4').className = 'hidden';
-                    }
-                }
-            }
+        console.log(data)
+        // Récupération dans l'API pour afficher le nom, l'image et le prix du Teddy sélectionné
+        teddieName.innerHTML = data.name;
+        teddieImg.src = data.imageUrl;
+        data.price = data.price/100;
+        teddiePrice.textContent = `Prix : ${data.price},00 €`;  
+        for (let j=0; j<data.colors.length; j++) {     
+            // Boucle pour afficher les couleurs dispo
+
+            colorForm.appendChild(newInput.cloneNode(true)).id= `color-${j}`;
+            colorForm.appendChild(newLabel.cloneNode(true)).id= `color${j}`
+            document.getElementById(`color${j}`).innerHTML = data.colors[j];
+            document.getElementById(`color${j}`).htmlFor = `color-${j}`;
+            colorForm.appendChild(newBr.cloneNode(true));         
         }
+        
     })
     .catch(function(err) {
         console.log('Fetch problem: ' + err.message);

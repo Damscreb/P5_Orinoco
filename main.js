@@ -30,6 +30,7 @@ let teddiesImgs = document.querySelectorAll("#cards img");
 
 let teddiesId = [];
 
+
 // fetch :  accès à l'API
 fetch('http://localhost:3000/api/teddies')
     .then(function(response) {
@@ -44,49 +45,40 @@ fetch('http://localhost:3000/api/teddies')
 
                 // On ajoute une premiere div a qui on donne ses classes
             cards.appendChild(firstDiv.cloneNode(true)).className += ` div1-${i}`;
-            console.log('1');
                 // On sélectionne la bonne nouvelle div (class) pour y ajouter une seconde div a qui on donne ses classes
             document.querySelector(`div.div1-${i}`).appendChild(secondDiv.cloneNode(true)).className += ` div2-${i}`;
-            console.log('2');
                 // Ajoutons notre image avec ses classes
             document.querySelector(`div.div2-${i}`).appendChild(img.cloneNode(true)).className += ` img-${i}`;
-            console.log('3');
                 // Ajoutons aussi une toisième div à la deuxième div
             document.querySelector(`div.div2-${i}`).appendChild(thirdDiv.cloneNode(true)).className += ` div3-${i}`;
-            console.log('4');
                 // Ajoutons à cette troisième div un h4 un p et un a
             document.querySelector(`div.div3-${i}`).appendChild(h4.cloneNode(true)).className += ` h4-${i}`;
             document.querySelector(`div.div3-${i}`).appendChild(p.cloneNode(true)).className += ` description-${i}`;
             document.querySelector(`div.div3-${i}`).appendChild(a.cloneNode(true)).className += ` link-${i}`;
-            console.log('5');
                 // Ajoutons à a un bouton et un href
             document.querySelector(`a.link-${i}`).appendChild(button.cloneNode(true));
-            console.log('6');
 
 
             // Partie récupération de données et affichage document.
             document.querySelector(`h4.h4-${i}`).textContent = data[i].name;
-            console.log('7');
             document.querySelector(`p.description-${i}`).textContent = data[i].description;
-            console.log('8');
             document.querySelector(`img.img-${i}`).src = data[i].imageUrl;
             teddiesId.push(data[i]._id);
 
         }
+        // Récupération de mes boutons dans une NodeList
+        let detailBtnNl = document.querySelectorAll(".btn-info");
+        console.log(detailBtnNl);
+
+        // Sauvegarde dans localStorage de l'ID concerné au clic du btn détail
+        // La boucle permet de voyager dans ma NodeList pour ajouter un addEventListener à chaque composant
+        for (let i=0; i<detailBtnNl.length; i++) {
+            detailBtnNl[i].addEventListener('click', function(){
+                localStorage.id = teddiesId[i];})
+            }    
     })
     .catch(function(err) {
         console.log('Fetch problem: ' + err.message);
     });
 
 
-// Récupération de mes boutons dans une NodeList
-let detailBtnNl = document.querySelectorAll(".btn-info");
-
-
-// Sauvegarde dans localStorage de l'ID concerné au clic du btn détail
-// La boucle permet de voyager dans ma NodeList pour ajouter un addEventListener à chaque composant
-for (let i=0; i<detailBtnNl.length; i++) {
-    detailBtnNl[i].addEventListener('click', function(){
-        localStorage.id = teddiesId[i];
-    })
-}
