@@ -103,7 +103,8 @@ fetch(`http://localhost:3000/api/teddies/${localStorage.id}`)
                         i = productArray.length; 
                     }                   
 
-                    if (i === (productArray.length)-1 && productArray[i].id !== localStorage.id) {  // Si on arrive au bout de la longueur du tableau, le produit est donc nouveau --> on l'ajoute
+                    // Si on arrive au bout de la longueur du tableau, le produit est donc nouveau --> on l'ajoute
+                    if (i === (productArray.length)-1 && productArray[i].id !== localStorage.id) {  
                         
                         // On ajoute une nouvelle entrée dans le tableau 
                         productArray.push(product);                    
