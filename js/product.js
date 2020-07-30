@@ -120,6 +120,8 @@ fetch(`http://localhost:3000/api/teddies/${localStorage.id}`)
                         Total : ${product.quantity}`;
                         confirmation.hidden = false;
 
+                        // Mettons la quantité totale à jour
+
                         // Stoppons la boucle for
                         i = productArray.length; 
                     }
