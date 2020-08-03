@@ -30,11 +30,12 @@ if (localStorage.getItem('products') !== null) {
             e.preventDefault();
 
             // Récupération de la quantité demandée
-            let addQuantity = document.getElementById('quantity').value;
+            const addQuantity = document.getElementById('quantity').value;
             totalQuantity += parseInt(addQuantity);
             
             // Affichons la
             document.querySelector(`span[class='badge badge-pill badge-success']`).textContent = `${totalQuantity}`;
+            console.log(`Valeur affichée :p`);
         })
     }
 

@@ -91,7 +91,7 @@ fetch(`http://localhost:3000/api/teddies/${localStorage.id}`)
                         // Afficher une alerte pour dire que le produit a été ajouté dans le panier
                         confirmation.innerHTML =`${data.name} a bien été ajouté au panier (x${product.quantity})
                                                 <br/>
-                                                Total : ${productArray[i].quantity}`;
+                                                Total de ${data.name} : ${productArray[i].quantity}`;
                         confirmation.hidden = false;
 
                         // Enregistrons les données
@@ -117,7 +117,7 @@ fetch(`http://localhost:3000/api/teddies/${localStorage.id}`)
                         // Afficher une alerte pour dire que le produit a été ajouté dans le panier
                         confirmation.innerHTML = `${data.name} a bien été ajouté au panier (x${product.quantity})
                         <br/>
-                        Total : ${product.quantity}`;
+                        Total de ${data.name} : ${product.quantity}`;
                         confirmation.hidden = false;
 
                         // Mettons la quantité totale à jour
