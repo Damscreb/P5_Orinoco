@@ -15,7 +15,7 @@ if (localStorage.getItem('products') !== null) {
 
         // Définissons ce qui sera rajouté
         let cartProduct = document.createElement('div');
-        cartProduct.id = `${productCartArray[i].name}`;
+        cartProduct.id = `${productCartArray[i].id}`;
         cartProduct.className = 'row d-flex justify-content-between border border-info p-3 mb-3 text-right';
         cartProduct.innerHTML = `<div class='col-4 text-center'>
                                     <img src='${productCartArray[i].imageUrl}' class='furniture-height-cart mb-2'/>
@@ -26,7 +26,7 @@ if (localStorage.getItem('products') !== null) {
                                     <p class='informations'>Prix unitaire : ${productCartArray[i].price},00€</p>
                                     <p class='informations'>Quantité : ${productCartArray[i].quantity}</p>      
                                     <p class='informations'><strong>Prix total : ${productCartArray[i].price * productCartArray[i].quantity},00€</strong></p>
-                                    <button class='btn btn-danger' name ='${productCartArray[i].name}'>Supprimer</button>        
+                                    <button class='btn btn-danger' name='${cartProduct.id}'>Supprimer</button>        
                                 </div>`;
 
         // Additionons le prix total
@@ -35,25 +35,29 @@ if (localStorage.getItem('products') !== null) {
         // Affichons tous nos produits
         productCartHTML.appendChild(cartProduct).cloneNode(true);
 
-
         // Ajoutons l'effet du bouton 'Supprimer' pour chaque article du panier
-        document.querySelector(`button[name='${productCartArray[i].name}']`).addEventListener('click', function (e) {
-            
-            // Suppression de l'HTML concerné
-            document.getElementById(`${productCartArray[i].name}`).remove();
+        document.querySelector(`button[name='${cartProduct.id}']`).addEventListener('click', function (e) {
 
             // Mise à jour du prix total du panier
-            thePrice -= productCartArray[i].price * productCartArray[i].quantity;
-            totalPrice.innerHTML = `Prix du panier : ${thePrice},00€`;
+            if (productCartArray.length !== 1) {
+                thePrice -= productCartArray[i].price * productCartArray[i].quantity;
+                totalPrice.innerHTML = `Prix du panier : ${thePrice},00€`;
+            }
+            
+            // Suppression de l'HTML concerné
+            document.getElementById(document.querySelector(`button[name='${cartProduct.id}']`).name).remove();
 
             // Suppression du produit concerné dans le tableau de produits du panier
             productCartArray.splice(i,1);  // Ca ca marche, c'est validé
+            console.log(productCartArray);
 
             // Suppression du produit concerné dans le localStorage
             let productArrayString = JSON.stringify(productCartArray);  // On convertit le tableau de produits en string 
             localStorage.setItem('products', productArrayString);       // On le sauvegarde dans le localStorage
 
-            // Si on a plus de produits dans le panier, on reset le localStorage, on enlève le bouton 'Passer la commande', on affiche 'Panier vide', on enlève le formulaire si il est là
+
+            // Si on a plus de produits dans le panier, on reset le localStorage, on enlève le bouton 'Passer la commande', 
+            // on affiche 'Panier vide', on enlève le formulaire si il est là.
             // Sinon le problème est qu'on a un localStorage.products vide, et qu'on a pas géré ce soucis pour rajouter des produits dans le panier ^^
             if (productCartArray.length === 0) {
 
@@ -74,7 +78,6 @@ if (localStorage.getItem('products') !== null) {
                 // On enlève le formulaire si jamais
                 document.getElementById('form-client').hidden =true;
             }
-
         })
     }
 
@@ -92,17 +95,14 @@ if (localStorage.getItem('products') !== null) {
         // Désactiver l'action par défaut 
         e.preventDefault();
 
-        // Affichons le formulaire de commande
+        // Affichons le formulaire de commande et lebouton 'Valider la commande'
         document.getElementById('form-client').hidden =false;
 
-        // Cachons le bouton 'Passer la commande' pour le remplacer par un 'Valider la commande'
+        // Cachons le bouton 'Passer la commande'
         document.getElementById('cart-validation').hidden = true;
     })
     
-}
-
-// Si le panier est vide
-else {
+} else { // Si le panier est vide
     // On crée le texte qu'on veut ajouter
     const cartEmpty = document.createElement('div');
         cartEmpty.className ='row';

@@ -19,7 +19,7 @@ if (localStorage.getItem('products') !== null) {
         newSpan.textContent = `${totalQuantity}`;
     document.querySelector(`h5[name='cart']`).appendChild(newSpan);
 
-    // Vérifions cette condition pour éviter toute erreur bloquante
+    // Vérifions cette condition pour éviter toute erreur bloquante (on est sur la page produit)
     if (document.querySelector('#product-form') !== null) {
 
         // On va avoir besoin de mettre à jour la quantité lors de l'AJOUT d'un produit au panier
@@ -35,7 +35,6 @@ if (localStorage.getItem('products') !== null) {
             
             // Affichons la
             document.querySelector(`span[class='badge badge-pill badge-success']`).textContent = `${totalQuantity}`;
-            console.log(`Valeur affichée :p`);
         })
     }
 
@@ -54,13 +53,15 @@ if (localStorage.getItem('products') !== null) {
             // Récupération de la quantité supprimée
             let lowerQuantity = parseInt(productCartArray[i].quantity)
             totalQuantity -= lowerQuantity;
-            console.log(lowerQuantity);
-            console.log(totalQuantity);
 
             // Affichons la
             document.querySelector(`span[class='badge badge-pill badge-success']`).textContent = `${totalQuantity}`;
             })
         }
     }
+} else {
+
+    // Si le localStorage.products est vide --> pas de badge
+    document.querySelector(`span[class='badge badge-pill badge-success']`).textContent = "";
 }
 
