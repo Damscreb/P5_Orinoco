@@ -40,7 +40,7 @@ if (localStorage.getItem('products') !== null) {
 
             // Mise à jour du prix total du panier
             if (productCartArray.length !== 1) {
-                thePrice -= productCartArray[i].price * productCartArray[i].quantity;
+                thePrice -= productCartArray[i].price * productCartArray[i].quantity; // Changer les paramètres !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 totalPrice.innerHTML = `Prix du panier : ${thePrice},00€`;
             }
             

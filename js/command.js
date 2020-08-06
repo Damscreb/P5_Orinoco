@@ -58,58 +58,36 @@ function validateEmail() {
 }
 
 // Vérification des données client si on est bien sur la page cart.html
-if (document.getElementById('form-customer') !== null) {
+if (document.getElementById('form-customer') !== null) { // Le if nous permet de vérifier si on est bien sur la bonne page
+
     document.getElementById('form-customer').addEventListener('submit', function(e) {
 
         e.preventDefault();
-        validateInput('firstname', 20);
-        validateInput('lastname', 20);
-        validateAdress();
-        validateInput('city', 30);
-        validateEmail();
 
+        // On vérifie les inputs
+        let isFirstnameValid = validateInput('firstname', 20);
+        let isLastnameValid = validateInput('lastname', 20);
+        let isAddressValid = validateAdress();
+        let isCityValid = validateInput('city', 30);
+        let isEmailValid = validateEmail();
+
+        // Si inputs valides
+        if (isFirstnameValid && isLastnameValid && isAddressValid && isCityValid && isEmailValid) {
+            let firstName = document.getElementById('firstname').value;
+            let lastName = document.getElementById('lastname').value;
+            let adress = document.getElementById('adress').value;
+            let city = document.getElementById('city').value;
+            let email = document.getElementById('email').value;
+            
+            let newCustomer = new Customer(firstName, lastName, adress, city, email);
+            let customerString = JSON.stringify(newCustomer);
+            localStorage.setItem('customer', customerString);
+
+            // Méthode POST
+
+            // Puis passage sur page command.html si tout ok
+        }
     })
-}
-
-// Si ok
-// Récupérons les données client lors du clic du bouton 'Valider Commande' si on est sur la page cart.html
-if (document.getElementById('send-cart') !== null) {
-
-    // Ajoutons un addEventListener au bouton 'Valider Commande'
-    const buttonCustomer = document.getElementById('send-cart');
-    buttonCustomer.addEventListener('click', function(e) {
-
-        // Ici, on ne supprime pas l'action par défaut pour pouvoir à la fois enregistrer les données ET changer de page
-
-        if (localStorage.getItem('customer') === null) {
-
-            console.log('Cas client inexistant');
-            // On enregistre les données dans notre classe customer
-            let newCustomer = new Customer (`${document.getElementById('firstname').value}`, `${document.getElementById('lastname').value}`, `${document.getElementById('adress').value}`, `${document.getElementById('city').value}`, `${document.getElementById('email').value}`);
-
-            // Et on enregistre ça dans le localStorage
-            let customerString = JSON.stringify(newCustomer);
-            localStorage.setItem('customer', customerString);
-
-            window.location='./command.html';
-        }
-        
-        else {
-
-            console.log('Cas client existant');
-
-            // Dans le cas où le client existe déjà, on modifie les données de l'ancien client
-            localStorage.removeItem('customer')
-            newCustomer = new Customer (`${document.getElementById('firstname').value}`, `${document.getElementById('lastname').value}`, `${document.getElementById('adress').value}`, `${document.getElementById('city').value}`, `${document.getElementById('email').value}`);
-            
-            // Et on enregistre les nouvelles données dans le localStorage
-            let customerString = JSON.stringify(newCustomer);
-            localStorage.setItem('customer', customerString);
-
-            
-            window.location='./command.html';
-        }
-    });
 }
 
 
