@@ -34,3 +34,12 @@ p {
     border-radius : 3px;
     width : 50%;
 }
+
+.command-nbr {
+    color : #17A2B8;
+    font-size : 13px;
+}
+
+.color-info {
+    color : #17A2B8;
+}

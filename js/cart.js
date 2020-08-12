@@ -26,7 +26,7 @@ if (localStorage.getItem('products') !== null) {
                                     <p class='informations'>Prix unitaire : ${productCartArray[i].price},00€</p>
                                     <p class='informations'>Quantité : ${productCartArray[i].quantity}</p>      
                                     <p class='informations'><strong>Prix total : ${productCartArray[i].price * productCartArray[i].quantity},00€</strong></p>
-                                    <button class='btn btn-danger' name='${cartProduct.id}'>Supprimer</button>        
+                                    <button class='btn btn-danger btn-cart' name='${cartProduct.id}'>Supprimer</button>        
                                 </div>`;
 
         // Additionons le prix total
@@ -40,43 +40,48 @@ if (localStorage.getItem('products') !== null) {
 
             // Mise à jour du prix total du panier
             if (productCartArray.length !== 1) {
-                thePrice -= productCartArray[i].price * productCartArray[i].quantity; // Changer les paramètres !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                thePrice -= productCartArray[i].price * productCartArray[i].quantity;
                 totalPrice.innerHTML = `Prix du panier : ${thePrice},00€`;
             }
-            
+
             // Suppression de l'HTML concerné
             document.getElementById(document.querySelector(`button[name='${cartProduct.id}']`).name).remove();
 
             // Suppression du produit concerné dans le tableau de produits du panier
-            productCartArray.splice(i,1);  // Ca ca marche, c'est validé
-            console.log(productCartArray);
+            delete productCartArray[i];
 
             // Suppression du produit concerné dans le localStorage
             let productArrayString = JSON.stringify(productCartArray);  // On convertit le tableau de produits en string 
             localStorage.setItem('products', productArrayString);       // On le sauvegarde dans le localStorage
 
 
-            // Si on a plus de produits dans le panier, on reset le localStorage, on enlève le bouton 'Passer la commande', 
+            // Si on a plus de produits dans le panier, on reset le localStorage.products, on enlève le bouton 'Passer la commande', 
             // on affiche 'Panier vide', on enlève le formulaire si il est là.
             // Sinon le problème est qu'on a un localStorage.products vide, et qu'on a pas géré ce soucis pour rajouter des produits dans le panier ^^
-            if (productCartArray.length === 0) {
+            let j=0; // Nous sert à compter le nombre d'entrées nulles de notre tableau
+            for (const element of productCartArray) {
 
-                localStorage.removeItem('products');
-                console.log("LocalStorage vidé");
+                if (element == null) { // Comptons le nombre d'element nuls
+                    j++}
 
-                document.getElementById('cart-validation').hidden = true;
+                if (j===productCartArray.length) { // Si on a autant d'entrées nulles que d'entrées du tableau, on delete
+                    localStorage.removeItem('products');
+                    console.log("LocalStorage vidé");
 
-                // On crée le texte qu'on veut ajouter
-                const cartEmpty = document.createElement('div');
-                cartEmpty.className ='row';
-                cartEmpty.innerHTML =`<div class='col'><div class='jumbotron bg-light mb-0 text-center'><h2><u>Votre panier est vide</u></h2></div></div>`;
+                    document.getElementById('cart-validation').hidden = true;
 
-                // On l'introduit
-                const productCartHTML = document.getElementById('product-cart');
-                productCartHTML.appendChild(cartEmpty);
+                    // On crée le texte qu'on veut ajouter
+                    const cartEmpty = document.createElement('div');
+                    cartEmpty.className ='row';
+                    cartEmpty.innerHTML =`<div class='col'><div class='jumbotron bg-light mb-0 text-center'><h2><u>Votre panier est vide</u></h2></div></div>`;
 
-                // On enlève le formulaire si jamais
-                document.getElementById('form-client').hidden =true;
+                    // On l'introduit
+                    const productCartHTML = document.getElementById('product-cart');
+                    productCartHTML.appendChild(cartEmpty);
+
+                    // On enlève le formulaire si jamais
+                    document.getElementById('form-client').hidden =true;
+                }
             }
         })
     }

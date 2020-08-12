@@ -1,10 +1,10 @@
 // Création d'une classe client
 class Customer {
-    constructor(prenom, nom, adresse, ville, email){
-        this.prenom = prenom;
-        this.nom = nom;
-        this.adresse = adresse;
-        this.ville = ville;
+    constructor(firstName, lastName, address, city, email){
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.address = address;
+        this.city = city;
         this.email = email;
     }
 }
@@ -75,17 +75,48 @@ if (document.getElementById('form-customer') !== null) { // Le if nous permet de
         if (isFirstnameValid && isLastnameValid && isAddressValid && isCityValid && isEmailValid) {
             let firstName = document.getElementById('firstname').value;
             let lastName = document.getElementById('lastname').value;
-            let adress = document.getElementById('adress').value;
+            let address = document.getElementById('adress').value;
             let city = document.getElementById('city').value;
-            let email = document.getElementById('email').value;
-            
-            let newCustomer = new Customer(firstName, lastName, adress, city, email);
-            let customerString = JSON.stringify(newCustomer);
+            let email = document.getElementById('email').value;            
+            console.log(typeof firstName);
+            console.log(typeof lastName);
+            console.log(typeof address);
+            console.log(typeof city);
+            console.log(typeof email);
+
+            // Création et enregistrement de notre customer dans localStorage
+            let contact = new Customer(firstName, lastName, address, city, email);
+            let customerString = JSON.stringify(contact);
             localStorage.setItem('customer', customerString);
 
-            // Méthode POST
+            // Création du tableau ne contenant que les ID des produits du panier
+            let products = [];
+            let productCartArray = JSON.parse(localStorage.products);
+            for (let i=0; i<productCartArray.length; i++){
+                products.push(productCartArray[i].id);
+                console.log(typeof productCartArray[i].id);
+            }
+            console.log(products)
 
-            // Puis passage sur page command.html si tout ok
+            const requestApi = {contact, products};
+
+            // Méthode POST
+            fetch('http://localhost:3000/api/teddies/order', 
+                {method : 'post', 
+                headers : {'Content-Type': 'application/json'},
+                body : JSON.stringify(requestApi) })
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(data) {
+                localStorage.setItem('orderId', data.orderId)
+                window.location.href='./command.html'
+            })         
+            .catch(function(err) {
+                console.log('Fetch problem: ' + err.message);
+            });
+            
+            //Puis passage sur page command.html si tout ok
         }
     })
 }
@@ -115,19 +146,19 @@ if (document.getElementById('confirmation-customer') !== null) {
                 document.getElementById('confirmation-customer').innerHTML = `
                     <div class='row'>
                         <div class='col'>
-                            <h2 class='h4'>Mr/Mme ${customerData.nom}</h2>
+                            <h2 class='h4'>Mr/Mme ${customerData.lastName}</h2>
                             <p>Merci pour votre confiance, nous vous tiendrons à jour de la commande sous les plus brefs délais !</p><br />
                         </div>
                     </div>
 
                     <div class='row'>
-                        <div class='col col-4 bg-secondary mx-auto rounded border border-dark py-2'>
+                        <div class='col col-4 color-info mx-auto rounded border border-dark py-2'>
                             <h5 class='text-center'>Votre commande sera envoyée à :</h5>
                             <p class='text-center m-0'>
                                 <strong>
-                                    ${customerData.prenom} ${customerData.nom}<br />
-                                    ${customerData.adresse}<br />
-                                    ${customerData.ville}
+                                    ${customerData.firstName} ${customerData.lastName}<br />
+                                    ${customerData.address}<br />
+                                    ${customerData.city}
                                 </strong>
                             </p>
                         </div>
@@ -163,7 +194,7 @@ if (document.getElementById('confirmation-customer') !== null) {
             // A la fin on affiche le prix total
             if (i === (productCartCommandArray.length - 1)) {
 
-                document.getElementById('cart-presentation').innerHTML = `<u>Détail de la commande</u><u>Prix total : ${totalPrice},00€</u>`;
+                document.getElementById('cart-presentation').innerHTML = `<u>Détail de la commande n° <span class='command-nbr'>${localStorage.orderId}</span></u><u>Prix total : ${totalPrice},00€</u>`;
             }
         }
 }
