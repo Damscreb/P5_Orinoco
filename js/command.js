@@ -195,6 +195,10 @@ if (document.getElementById('confirmation-customer') !== null) {
             if (i === (productCartCommandArray.length - 1)) {
 
                 document.getElementById('cart-presentation').innerHTML = `<u>Détail de la commande n° <span class='command-nbr'>${localStorage.orderId}</span></u><u>Prix total : ${totalPrice},00€</u>`;
-            }
+            }   
+            
+            // Et on cleane le localStorage
+            localStorage.removeItem('products');
+            localStorage.removeItem('customer');
         }
 }
