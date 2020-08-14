@@ -16,6 +16,10 @@ if (localStorage.getItem('products') !== null) {
     // Calcul des quantités
     for (let i=0; i<productCartArray.length; i++) {
 
+        if (productCartArray[i] == null) { // Vérifions ceci pour éviter toute erreur bloquante
+
+            i++}
+
         totalQuantity += parseInt(productCartArray[i].quantity);
 
         if (i === (productCartArray.length - 1)) {
@@ -46,21 +50,22 @@ if (localStorage.getItem('products') !== null) {
     // On va avoir besoin de mettre à jour la quantité lors de la SUPPRESSION d'un produit au panier
     // Ajoutons un addEventListener au clic des boutons de suppression de produit
     let listButton = document.querySelectorAll(`button.btn-cart`);
-    if (listButton !== null) {
-        for (let i=0; i<listButton.length; i++){
-            document.querySelector(`button[name='${listButton[i].name}']`).addEventListener('click', function (e){
-                
-                // Désactiver l'action par défaut 
-                e.preventDefault();
-
-                // Récupération de la quantité supprimée
-                let lowerQuantity = parseInt(productCartArray[i].quantity)
-                totalQuantity -= lowerQuantity;
-
-                // Affichons la
-                document.querySelector(`span[class='badge badge-pill badge-success']`).textContent = `${totalQuantity}`;
-            })
+    for (let i=0; i<listButton.length; i++){
+        if (listButton[i] == null) {
+            i++
         }
+        document.querySelector(`button[name='${listButton[i].name}']`).addEventListener('click', function (e){
+            
+            // Désactiver l'action par défaut 
+            e.preventDefault();
+
+            // Récupération de la quantité supprimée
+            let lowerQuantity = parseInt(productCartArray[i].quantity)
+            totalQuantity -= lowerQuantity;
+
+            // Affichons la
+            document.querySelector(`span[class='badge badge-pill badge-success']`).textContent = `${totalQuantity}`;
+        })
     }
 
 } else { // Dans le cas ou on ajoute le 1er produit

@@ -108,15 +108,13 @@ if (document.getElementById('form-customer') !== null) { // Le if nous permet de
             .then(function(response) {
                 return response.json();
             })
-            .then(function(data) {
+            .then(function(data) { // Si tout est bon, on enregistre le n° de commande et on passe sur la page de confirmation
                 localStorage.setItem('orderId', data.orderId)
                 window.location.href='./command.html'
             })         
             .catch(function(err) {
                 console.log('Fetch problem: ' + err.message);
             });
-            
-            //Puis passage sur page command.html si tout ok
         }
     })
 }
@@ -191,7 +189,7 @@ if (document.getElementById('confirmation-customer') !== null) {
                     </div>
                 </div>`;
 
-            // A la fin on affiche le prix total
+            // A la fin on affiche le prix total et le n° de commande
             if (i === (productCartCommandArray.length - 1)) {
 
                 document.getElementById('cart-presentation').innerHTML = `<u>Détail de la commande n° <span class='command-nbr'>${localStorage.orderId}</span></u><u>Prix total : ${totalPrice},00€</u>`;

@@ -13,6 +13,10 @@ if (localStorage.getItem('products') !== null) {
     // Bouclons dans le local storage pour récupérer tous les produits
     for (let i=0; i<productCartArray.length; i++) {
 
+        if (productCartArray[i] == null) { // Vérifions ceci pour éviter toute erreur bloquante
+
+            i++}
+
         // Définissons ce qui sera rajouté
         let cartProduct = document.createElement('div');
         cartProduct.id = `${productCartArray[i].id}`;
@@ -31,7 +35,8 @@ if (localStorage.getItem('products') !== null) {
 
         // Additionons le prix total
         thePrice += productCartArray[i].price * productCartArray[i].quantity;
-            
+    
+        
         // Affichons tous nos produits
         productCartHTML.appendChild(cartProduct).cloneNode(true);
 
@@ -53,6 +58,7 @@ if (localStorage.getItem('products') !== null) {
             // Suppression du produit concerné dans le localStorage
             let productArrayString = JSON.stringify(productCartArray);  // On convertit le tableau de produits en string 
             localStorage.setItem('products', productArrayString);       // On le sauvegarde dans le localStorage
+        
 
 
             // Si on a plus de produits dans le panier, on reset le localStorage.products, on enlève le bouton 'Passer la commande', 
